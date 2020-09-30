@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import './database';
 
 import express, { Request, Response } from 'express';
+import 'express-async-errors';
 
 import routes from './routes';
 import AppError from './errors/AppError';

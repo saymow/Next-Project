@@ -35,6 +35,24 @@ routes.get('/me', authenticate, async (req, res) => {
   return res.send(posts);
 });
 
+routes.post('/', authenticate, async (req, res) => {
+  const { id } = req.user;
+  const { title, description, body } = req.body;
+
+  const postsRepository = getRepository(Post);
+
+  const post = postsRepository.create({
+    title,
+    description,
+    body,
+    author_id: id,
+  });
+
+  await postsRepository.save(post);
+
+  return res.status(201).send(post);
+});
+
 routes.delete('/:post_id', authenticate, async (req, res) => {
   const { id } = req.user;
   const { post_id } = req.params;
@@ -68,24 +86,6 @@ routes.put('/', authenticate, async (req, res) => {
   );
 
   return res.send(post);
-});
-
-routes.post('/', authenticate, async (req, res) => {
-  const { id } = req.user;
-  const { title, description, body } = req.body;
-
-  const postsRepository = getRepository(Post);
-
-  const post = postsRepository.create({
-    title,
-    description,
-    body,
-    author_id: id,
-  });
-
-  await postsRepository.save(post);
-
-  return res.status(201).send(post);
 });
 
 export default routes;
